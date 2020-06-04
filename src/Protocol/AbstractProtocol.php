@@ -210,7 +210,8 @@ abstract class AbstractProtocol
             },
             E_WARNING
         );
-        $this->socket = stream_socket_client($remote, $errorNum, $errorStr, self::TIMEOUT_CONNECTION);
+        $context = stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]);
+        $this->socket = @stream_socket_client($remote, $errorNum, $errorStr, self::TIMEOUT_CONNECTION, STREAM_CLIENT_CONNECT, $context);
         restore_error_handler();
 
         if ($this->socket === false) {
